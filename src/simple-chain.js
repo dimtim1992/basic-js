@@ -5,25 +5,49 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 const chainMaker = {
+  chainValues: [],
   getLength() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    return this.chainValues.length;
   },
-  addLink(/* value */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  addLink(value) {
+    this.chainValues.push(value);
+    return this;
   },
-  removeLink(/* position */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  removeLink(position) {
+    const element = this.chainValues[position - 1];
+
+    if (element === undefined) {
+      this.chainValues = [];
+
+      throw new Error('You can\'t remove incorrect link!');
+    }
+
+    this.chainValues.splice(position - 1, 1);
+    return this;
   },
   reverseChain() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    this.chainValues = this.chainValues.reverse();
+    return this;
   },
   finishChain() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    const chainResult = this.chainValues.reduce((acc, currentValue, index) => {
+      if (index === 0) {
+        if (this.chainValues.length > 1) {
+          acc += `( ${ currentValue } )~`;
+        } else {
+          acc += `( ${ currentValue } )`;
+        }
+      } else if (index === this.chainValues.length - 1) {
+        acc += `~( ${ currentValue } )`;
+      } else {
+        acc += `~( ${ currentValue } )~`
+      }
+      return acc;
+    }, '')
+
+    this.chainValues = [];
+
+    return chainResult;
   }
 };
 
